@@ -52,10 +52,19 @@ const normalizeRichTextField = (value, linkResolver, htmlSerializer) => ({
 // the `url` field. If the value is an external link, the value is provided
 // as-is. If the value is a document link, the document's data is provided on
 // the `document` key.
-const normalizeLinkField = (value, linkResolver, generateNodeId) => {
+// FIXME this is a fix for https://github.com/prismicio/prismic-javascript/issues/86
+const normalizeLinkField = (value, linkResolver, generateNodeId, documentTypeMappings) => {
   switch (value.link_type) {
     case 'Document':
       if (!value.type || !value.id || value.isBroken) return undefined
+
+      const mappedType = documentTypeMappings[value.id]
+
+      if (mappedType != value.type) {
+        console.warn(`Wrong type for ${value.id}: "${value.type}" instead of "${mappedType}"`)
+        value.type = mappedType
+      }
+      
       return {
         ...value,
         document___NODE: [generateNodeId(value.type, value.id)],
@@ -191,7 +200,7 @@ const normalizeGroupField = async args =>
 // of it. If the type is not supported or needs no normalizing, it is returned
 // as-is.
 export const normalizeField = async args => {
-  const { key, value, node, nodeHelpers, shouldNormalizeImage } = args
+  const { key, value, node, nodeHelpers, shouldNormalizeImage, documentTypeMappings } = args
   let { linkResolver, htmlSerializer } = args
   const { generateNodeId } = nodeHelpers
 
@@ -202,7 +211,7 @@ export const normalizeField = async args => {
     return normalizeRichTextField(value, linkResolver, htmlSerializer)
 
   if (isLinkField(value))
-    return normalizeLinkField(value, linkResolver, generateNodeId)
+    return normalizeLinkField(value, linkResolver, generateNodeId, documentTypeMappings)
 
   if (
     isImageField(value) &&

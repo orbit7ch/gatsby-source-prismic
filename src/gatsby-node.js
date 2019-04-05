@@ -7,12 +7,16 @@ const { createNodeFactory } = nodeHelpers
 
 export const sourceNodes = async (gatsby, pluginOptions) => {
   const { actions, createNodeId, store, cache } = gatsby
+
   const { createNode, touchNode } = actions
+
   const {
     repositoryName,
     accessToken,
-    linkResolver = () => {},
-    htmlSerializer = () => {},
+    linkResolver = () => {
+    },
+    htmlSerializer = () => {
+    },
     fetchLinks = [],
     lang = '*',
     shouldNormalizeImage = () => true,
@@ -24,6 +28,14 @@ export const sourceNodes = async (gatsby, pluginOptions) => {
     fetchLinks,
     lang,
   })
+
+
+  // create a mapper so we can get types of a specific id
+  // FIXME this is a fix for https://github.com/prismicio/prismic-javascript/issues/86
+  const documentTypeMappings = documents.reduce((acc, cur) => {
+    acc[cur.id] = cur.type
+    return acc
+  }, {})
 
   await Promise.all(
     documents.map(async doc => {
@@ -41,6 +53,7 @@ export const sourceNodes = async (gatsby, pluginOptions) => {
           store,
           cache,
           shouldNormalizeImage,
+          documentTypeMappings,
         })
 
         return node

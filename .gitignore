@@ -3,3 +3,6 @@
 /fetch.js
 /normalize.js
 node_modules
+.idea
+tmp.*
+package-lock.json

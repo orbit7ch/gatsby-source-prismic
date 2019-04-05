@@ -1,3 +1,8 @@
+
+
+# This is a quick fix for 
+This is a fix for https://github.com/prismicio/prismic-javascript/issues/86
+
 # gatsby-source-prismic
 
 Source plugin for pulling data into [Gatsby][gatsby] from [prismic.io][prismic]
