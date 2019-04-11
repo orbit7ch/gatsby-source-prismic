@@ -7,7 +7,8 @@
     "build": "babel src --out-dir .",
     "format": "prettier --trailing-comma all --no-semi --single-quote --write 'src/**/*.js'",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "babel -w src --out-dir ."
+    "watch": "babel -w src --out-dir .",
+    "dummy": "./node_modules/.bin/babel-node --presets es2015 src/dummy.js"
   },
   "homepage": "https://github.com/angeloashmore/gatsby-source-prismic",
   "repository": {

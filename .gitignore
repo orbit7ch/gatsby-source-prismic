@@ -4,5 +4,5 @@
 /normalize.js
 node_modules
 .idea
-tmp.*
+/dummy.js
 package-lock.json

@@ -1,7 +1,11 @@
 
 
-# This is a quick fix for 
+# Quick fix 
 This is a fix for https://github.com/prismicio/prismic-javascript/issues/86
+
+```
+npm run dummy
+```
 
 # gatsby-source-prismic
 
