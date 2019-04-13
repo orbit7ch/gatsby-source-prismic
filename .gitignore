@@ -1,7 +1,7 @@
 *.log
-/gatsby-node.js
-/fetch.js
-/normalize.js
+gatsby-node.js
+fetch.js
+normalize.js
 node_modules
 .idea
 /dummy.js
