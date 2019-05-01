@@ -16,6 +16,14 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var pagedGet = function () {
   var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(client) {
     var query = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -75,40 +83,78 @@ var _prismicJavascript2 = _interopRequireDefault(_prismicJavascript);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var fs = require('fs');
+
+function replacer(key, value) {
+  if (typeof value === 'string') {
+    return value.replace(/\t/g, '').replace(/\n/g, '');
+  }
+  return value;
+}
+
+var writeJsonFile = function writeJsonFile(fileName, content) {
+  return new _promise2.default(function (resolve, reject) {
+    try {
+      var text = (0, _stringify2.default)(content, replacer, 4);
+      fs.writeFile(fileName, text, function (err) {
+        if (err) reject(err);else resolve();
+      });
+    } catch (error) {
+      console.error(fileName, error);
+    }
+  });
+};
+
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(_ref2) {
     var repositoryName = _ref2.repositoryName,
         accessToken = _ref2.accessToken,
         fetchLinks = _ref2.fetchLinks,
         lang = _ref2.lang;
-    var apiEndpoint, client, documents;
+
+    var _documents, apiEndpoint, client, documents;
+
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            if (!(repositoryName.indexOf('.local.json') > -1)) {
+              _context.next = 4;
+              break;
+            }
+
+            console.log('use local repository dump ' + repositoryName);
+            _documents = require('' + repositoryName);
+            return _context.abrupt('return', { documents: _documents });
+
+          case 4:
+
             console.time('Fetch Prismic data');
             console.log('Starting to fetch data from Prismic');
 
             apiEndpoint = 'https://' + repositoryName + '.prismic.io/api/v2';
-            _context.next = 5;
+            _context.next = 9;
             return _prismicJavascript2.default.api(apiEndpoint, { accessToken: accessToken });
 
-          case 5:
+          case 9:
             client = _context.sent;
-            _context.next = 8;
+            _context.next = 12;
             return pagedGet(client, [], { fetchLinks: fetchLinks }, lang);
 
-          case 8:
+          case 12:
             documents = _context.sent;
 
 
             console.timeEnd('Fetch Prismic data');
 
+            writeJsonFile(repositoryName + '.local.json', documents);
+            console.log('local repository ' + repositoryName + '.local.json saved');
+
             return _context.abrupt('return', {
               documents: documents
             });
 
-          case 11:
+          case 17:
           case 'end':
             return _context.stop();
         }
