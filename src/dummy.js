@@ -19,7 +19,8 @@ const gatsbyMock = {
 }
 
 const options = {
-  repositoryName: 'content-type-test',
+  // repositoryName: 'content-type-test',
+  repositoryName: 'content-type-test.local.json',
   accessToken: null,
 }
 

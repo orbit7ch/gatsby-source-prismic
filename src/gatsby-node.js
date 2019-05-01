@@ -29,7 +29,6 @@ export const sourceNodes = async (gatsby, pluginOptions) => {
     lang,
   })
 
-
   // create a mapper so we can get types of a specific id
   // FIXME this is a fix for https://github.com/prismicio/prismic-javascript/issues/86
   const documentTypeMappings = documents.reduce((acc, cur) => {
