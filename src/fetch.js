@@ -28,7 +28,7 @@ export default async ({ repositoryName, accessToken, fetchLinks, lang }) => {
 
   if (repositoryName.indexOf('.local.json') > -1) {
     console.log(`use local repository dump ${repositoryName}`)
-    const documents = require(`../${repositoryName}`)
+    const documents = require(`${repositoryName}`)
     return { documents }
   }
 
@@ -43,7 +43,9 @@ export default async ({ repositoryName, accessToken, fetchLinks, lang }) => {
 
   console.timeEnd(`Fetch Prismic data`)
 
+
   writeJsonFile(`${repositoryName}.local.json`, documents)
+  console.log(`local repository ${repositoryName}.local.json saved`)
 
   return {
     documents,
